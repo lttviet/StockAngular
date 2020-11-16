@@ -1,10 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { BrokerService } from './broker.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: `
+    <h1>{{title}}</h1>
+    <h2>Cash: {{cash | currency: "USD"}}</h2>
+    <app-company></app-company>
+  `,
+  providers: [BrokerService]
 })
-export class AppComponent {
-  title = 'StockAngular';
+export class AppComponent implements OnInit {
+  title = 'Stock market simulator';
+  cash: number;
+
+  constructor(private brokerService: BrokerService) {}
+
+  ngOnInit(): void {
+    this.brokerService.cash$.subscribe(cash => this.cash = cash);
+  }
 }
