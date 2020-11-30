@@ -7,7 +7,9 @@ import { BrokerService } from './broker.service';
   template: `
     <h1>{{title}}</h1>
     <h2>Cash: {{cash | currency: "USD"}}</h2>
-    <app-company></app-company>
+
+    <app-search></app-search>
+    <app-portfolio></app-portfolio>
   `,
   providers: [BrokerService]
 })
