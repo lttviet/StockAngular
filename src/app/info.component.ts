@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Quote } from './quote';
-import { Stock } from './stock';
-import { BrokerService } from './broker.service';
+import { BrokerService, Stock } from './broker.service';
 
 @Component({
   selector: 'app-info',
@@ -42,16 +41,20 @@ export class InfoComponent implements OnInit {
   }
 
   buy(symbol: string): void {
-    this.brokerService.buy(symbol, this.quote.current, 1);
+    this.brokerService.buy(symbol.toUpperCase(), this.quote.current, 1);
   }
 
   sell(symbol: string): void {
-    this.brokerService.sell(symbol, this.quote.current, 1);
+    this.brokerService.sell(symbol.toUpperCase(), this.quote.current, 1);
   }
 
   canSell(symbol: string): boolean {
+    if (!this.portfolio) {
+      return false;
+    }
+    
     return this.portfolio
-      .find(stock => stock.symbol === symbol)
+      .find(stock => stock.symbol === symbol.toUpperCase())
       ?.quantity > 0;
   }
 }

@@ -1,59 +1,111 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map, first } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
-import { Stock } from './stock';
+export interface Cash {
+  id: string,
+  cash: number
+}
+
+export interface Stock {
+  symbol: string;
+  cost: number;
+  quantity: number;
+}
 
 @Injectable()
 export class BrokerService {
-  private cash = 250;
-  private portfolio: Stock[] = [];
+  private cashDoc: AngularFirestoreDocument<Cash>;
+  private stocksCollection: AngularFirestoreCollection<Stock>;
 
-  private cashSource = new BehaviorSubject(this.cash);
-  private portfolioSource = new BehaviorSubject<Stock[]>(this.portfolio);
+  cash$: Observable<number>;
+  portfolio$: Observable<Stock[]>;
 
-  cash$ = this.cashSource.asObservable();
-  portfolio$ = this.portfolioSource.asObservable();
+  constructor(private firestore: AngularFirestore) {
+    this.cashDoc = this.firestore.doc<Cash>('portfolio/1');
+    this.cash$ = this.cashDoc.valueChanges().pipe(
+      map(p => p.cash)
+    )
+    this.stocksCollection = this.firestore.collection<Stock>('portfolio/1/stocks');
+    this.portfolio$ = this.stocksCollection.valueChanges({ idField: 'id' });
+  }
+
+  private updateCash(newCash: number): void {
+    this.cashDoc.update({ cash: newCash });
+  }
+
+  private findStock(symbol: string): Observable<(Stock & { id: string })[]> {
+    return this.firestore.collection<Stock>(
+      'portfolio/1/stocks', 
+      ref => ref.where('symbol', '==', symbol.toUpperCase()).limit(1)
+    ).valueChanges({ idField: 'id' }).pipe(
+      first(),
+    );
+  }
+
+  private buyStock(stock: Stock): void {
+    this.findStock(stock.symbol).pipe(
+      map(found => {
+        if (found.length > 0) {
+          this.stocksCollection.doc(found[0].id).update({
+            quantity: found[0].quantity + stock.quantity,
+            cost: found[0].cost + stock.cost
+          });
+        } else {
+          this.stocksCollection.add(stock);
+        }
+      }),
+    ).subscribe();
+  }
+
+  private sellStock(stock: Stock): void {
+    this.findStock(stock.symbol).pipe(
+      map(found => {
+        if (found.length > 0 && found[0].quantity >= stock.quantity) {
+          this.stocksCollection.doc(found[0].id).update({
+            quantity: found[0].quantity - stock.quantity,
+            cost: found[0].cost - stock.cost
+          });
+        } else {
+          console.log('Not enough stock to sell.')
+        }
+      }),
+    ).subscribe();
+  }
 
   buy(symbol: string, price: number, qty: number): void {
     const totalCost = price * qty;
-
-    if (this.cash < totalCost) {
-      console.error('Insufficient fund.');
-      return;
+    const stock: Stock = {
+      symbol,
+      cost: totalCost,
+      quantity: qty
     }
 
-    this.cash -= totalCost;
-    this.cashSource.next(this.cash);
-
-    const found = this.portfolio.find(stock => stock.symbol === symbol);
-    if (found) {
-      found.quantity += qty;
-      found.cost += totalCost;
-    } else {
-      this.portfolio.push({
-        symbol,
-        quantity: qty,
-        cost: totalCost
-      });
-    }
-    console.log(this.portfolio);
-    this.portfolioSource.next(this.portfolio);
+    this.cash$.pipe(
+      first(cash => cash >= totalCost),
+      map(cash => {
+        this.updateCash(cash - totalCost);
+        this.buyStock(stock);
+        return cash - totalCost;
+      })
+    ).subscribe();
   }
 
   sell(symbol: string, price: number, qty: number): void {
-    const found = this.portfolio.find(stock => stock.symbol === symbol);
-    if (!found || found.quantity < qty) {
-      console.error('Not enough stock to sell');
-      return;
+    const total = price * qty;
+    const stock: Stock = {
+      symbol,
+      cost: total,
+      quantity: qty
     }
 
-    const total = price * qty;
-    this.cash += total;
-    this.cashSource.next(this.cash);
-
-    found.quantity -= qty;
-    found.cost -= total;
-    console.log(this.portfolio);
-    this.portfolioSource.next(this.portfolio);
+    this.cash$.pipe(
+      first(),
+      map(cash => {
+        this.updateCash(cash + total);
+        this.sellStock(stock);
+      })
+    ).subscribe();
   }
 }
