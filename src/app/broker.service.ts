@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { concat, Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
@@ -44,8 +44,8 @@ export class BrokerService {
     );
   }
 
-  private buyStock(stock: Stock): void {
-    this.findStock(stock.symbol).pipe(
+  private buyStock(stock: Stock): Observable<void> {
+    return this.findStock(stock.symbol).pipe(
       map(found => {
         if (found.length > 0) {
           this.stocksCollection.doc(found[0].id).update({
@@ -56,11 +56,11 @@ export class BrokerService {
           this.stocksCollection.add(stock);
         }
       }),
-    ).subscribe();
+    );
   }
 
-  private sellStock(stock: Stock): void {
-    this.findStock(stock.symbol).pipe(
+  private sellStock(stock: Stock): Observable<void> {
+    return this.findStock(stock.symbol).pipe(
       map(found => {
         if (found.length > 0 && found[0].quantity >= stock.quantity) {
           this.stocksCollection.doc(found[0].id).update({
@@ -71,7 +71,7 @@ export class BrokerService {
           console.log('Not enough stock to sell.')
         }
       }),
-    ).subscribe();
+    );
   }
 
   buy(symbol: string, price: number, qty: number): void {
@@ -82,13 +82,12 @@ export class BrokerService {
       quantity: qty
     }
 
-    this.cash$.pipe(
-      first(cash => cash >= totalCost),
-      map(cash => {
-        this.updateCash(cash - totalCost);
-        this.buyStock(stock);
-        return cash - totalCost;
-      })
+    concat(
+      this.cash$.pipe(
+        first(cash => cash >= totalCost),
+        map(cash => this.updateCash(cash - totalCost)),
+      ),
+      this.buyStock(stock)
     ).subscribe();
   }
 
@@ -100,12 +99,12 @@ export class BrokerService {
       quantity: qty
     }
 
-    this.cash$.pipe(
-      first(),
-      map(cash => {
-        this.updateCash(cash + total);
-        this.sellStock(stock);
-      })
-    ).subscribe();
+    concat(
+      this.cash$.pipe(
+        first(),
+        map(cash => this.updateCash(cash + total))
+      ),
+      this.sellStock(stock)
+    ).subscribe()
   }
 }
