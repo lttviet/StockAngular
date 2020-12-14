@@ -1,26 +1,26 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Quote } from './quote';
+import { Quote } from './quote.service';
 import { BrokerService, Stock } from './broker.service';
 
 @Component({
   selector: 'app-info',
   template: `
     <p>
-      {{ symbol | uppercase }}
+      {{ quote.symbol | uppercase }}
       - {{ quote.current | currency: "USD" }}
-      - {{ quote.timestamp * 1000 | date: 'long'}}
+      - {{ quote.timestamp | date: 'long'}}
 
       <button
-        (click)="buy(symbol)"
+        (click)="buy(quote.symbol)"
         [disabled]="cash < quote.current"
       >
         Buy
       </button>
 
       <button
-        (click)="sell(symbol)"
-        [disabled]="!canSell(symbol)"
+        (click)="sell(quote.symbol)"
+        [disabled]="!canSell(quote.symbol)"
       >
         Sell
       </button>
@@ -28,7 +28,6 @@ import { BrokerService, Stock } from './broker.service';
   `
 })
 export class InfoComponent implements OnInit {
-  @Input() symbol: string;
   @Input() quote: Quote;
   cash: number;
   portfolio: Stock[];

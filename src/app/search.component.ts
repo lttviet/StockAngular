@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { map } from 'rxjs/operators';
 
-import { Quote } from './quote';
-import { QuoteService } from './quote.service';
+import { QuoteService, Quote } from './quote.service';
 
 @Component({
   selector: 'app-search',
@@ -17,21 +17,46 @@ import { QuoteService } from './quote.service';
     </button>
 
     <div *ngIf="quote">
-      <app-info [symbol]="symbol.value" [quote]="quote"></app-info>
+      <app-info [quote]="quote"></app-info>
     </div>
   `,
   providers: [QuoteService]
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit, OnDestroy {
+  private lastSymbol = ''; 
   quote: Quote;
 
-  constructor(private quoteService: QuoteService) {}
+  constructor(private quoteService: QuoteService) {
+  }
+
+  ngOnInit(): void {
+    this.quoteService.connect();
+    this.quoteService.socket$.pipe(
+      map(data => ({
+        symbol: data.data[0].s,
+        current: data.data[0].p,
+        timestamp: data.data[0].t
+      }) as Quote)
+    ).subscribe(
+      q => this.quote = q,
+      err => console.error(err)
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.quoteService.socket$.unsubscribe();
+  }
 
   search(symbol: string): void {
+    symbol = symbol.toUpperCase();
     this.quote = null;
 
-    this.quoteService
-      .getQuote(symbol)
-      .subscribe(quote => this.quote = quote);
+    if (this.lastSymbol !== '') {
+      this.quoteService.socket$
+        .next({type: 'unsubscribe', symbol: this.lastSymbol});
+    }
+    this.lastSymbol = symbol;
+
+    this.quoteService.socket$.next({type: 'subscribe', symbol});
   }
 }
