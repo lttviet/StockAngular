@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Quote } from './quote.service';
-import { BrokerService, Stock } from './broker.service';
+import { Stock } from './broker.service';
 import { SignalRService } from './signalr.service';
 
 @Component({
@@ -33,7 +33,7 @@ export class InfoComponent implements OnInit {
   cash: number;
   stocks: Stock[];
 
-  constructor(private brokerService: BrokerService, private signalRService: SignalRService) {}
+  constructor(private signalRService: SignalRService) {}
 
   ngOnInit(): void {
     this.signalRService.cash$.subscribe(cash => this.cash = cash);
@@ -41,11 +41,11 @@ export class InfoComponent implements OnInit {
   }
 
   buy(symbol: string): void {
-    this.brokerService.buy(symbol.toUpperCase(), this.quote.current, 1);
+    this.signalRService.buyStock(symbol.toUpperCase(), this.quote.current, 1);
   }
 
   sell(symbol: string): void {
-    this.brokerService.sell(symbol.toUpperCase(), this.quote.current, 1);
+    this.signalRService.sellStock(symbol.toUpperCase(), this.quote.current, 1);
   }
 
   canSell(symbol: string): boolean {

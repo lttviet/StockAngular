@@ -14,6 +14,7 @@ export interface Stock {
   quantity: number;
 }
 
+// TODO merge with signalR.service
 @Injectable()
 export class BrokerService {
   private cashDoc: AngularFirestoreDocument<Cash>;

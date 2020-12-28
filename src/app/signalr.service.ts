@@ -37,6 +37,11 @@ export class SignalRService {
       (stocks: Stock[]) => this.stocks$.next(stocks)
     );
 
+    this.connection.on(
+      "ReceiveMessage",
+      (msg: string) => console.log(msg)
+    );
+
     this.connection
       .start()
       .then(() => this.connected$.next(true))
@@ -49,5 +54,13 @@ export class SignalRService {
 
   public getInitialStocks(): void {
     this.connection.send("GetStocks", this.portfolioId);
+  }
+
+  public buyStock(symbol: string, price: number, quantity: number): void {
+    this.connection.send("BuyStock", this.portfolioId, symbol.toUpperCase(), price, quantity);
+  }
+
+  public sellStock(symbol: string, price: number, quantity: number): void {
+    this.connection.send("SellStock", this.portfolioId, symbol.toUpperCase(), price, quantity);
   }
 }
