@@ -8,17 +8,24 @@ export interface Quote {
 }
 
 export interface QuoteResponse {
-  data: [{
+  type: string,
+  data?: [{
+    s: string,
     p: number,
     t: number
   }]
 }
 
-const SOCKET = 'wss://ws.finnhub.io?token=';
+export interface QuoteRequest {
+  type: string,
+  symbol: string
+}
+
+const SOCKET = '';
 
 @Injectable()
 export class QuoteService {
-  socket$: WebSocketSubject<QuoteResponse | any>;
+  socket$: WebSocketSubject<QuoteResponse | QuoteRequest>;
 
   connect(): void {
     if (!this.socket$ || this.socket$.closed) {

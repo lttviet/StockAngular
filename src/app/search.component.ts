@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 
-import { QuoteService, Quote } from './quote.service';
+import { QuoteService, Quote, QuoteResponse } from './quote.service';
 
 @Component({
   selector: 'app-search',
@@ -32,11 +32,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.quoteService.connect();
     this.quoteService.socket$.pipe(
-      map(data => ({
-        symbol: data.data[0].s,
-        current: data.data[0].p,
-        timestamp: data.data[0].t
-      }) as Quote)
+      map((data: QuoteResponse) => {
+        if (data.data) {
+          return {
+            symbol: data.data[0].s,
+            current: data.data[0].p,
+            timestamp: data.data[0].t
+          } as Quote
+        }
+      })
     ).subscribe(
       q => this.quote = q,
       err => console.error(err)
