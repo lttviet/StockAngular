@@ -52,6 +52,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   search(symbol: string): void {
+    // TODO error if symbol not found
     symbol = symbol.toUpperCase();
     this.quote = null;
 

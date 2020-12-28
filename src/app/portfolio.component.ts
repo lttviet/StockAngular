@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BrokerService, Stock } from './broker.service';
+import { Stock } from './broker.service';
+import { SignalRService } from './signalr.service';
 
 @Component({
   selector: 'app-portfolio',
   template: `
     <h2>Portfolio</h2>
-    <div *ngFor='let stock of portfolio'>
+    <div *ngFor='let stock of stocks'>
       <p>
         {{ stock.symbol | uppercase }} : {{ stock.quantity }} shares for {{ stock.cost | currency: "USD" }}
       </p>
@@ -14,12 +15,18 @@ import { BrokerService, Stock } from './broker.service';
   `
 })
 export class PortfolioComponent implements OnInit {
-  portfolio: Stock[];
+  stocks: Stock[];
 
-  constructor(private brokerService: BrokerService) {}
+  constructor(private signalRService: SignalRService) {}
 
   ngOnInit(): void {
-    this.brokerService.portfolio$
-      .subscribe(portfolio => this.portfolio = portfolio);
+    this.signalRService.stocks$.subscribe(stocks => this.stocks = stocks);
+    this.signalRService
+      .connected$
+      .subscribe(connected => {
+        if (connected) {
+          this.signalRService.getInitialStocks();
+        }
+      })
   }
 }
