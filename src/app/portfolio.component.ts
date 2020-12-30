@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Stock } from './models/stock';
-import { SignalRService } from './services/signalr.service';
+import { BrokerService } from './services/broker.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -17,16 +17,16 @@ import { SignalRService } from './services/signalr.service';
 export class PortfolioComponent implements OnInit {
   stocks: Stock[];
 
-  constructor(private signalRService: SignalRService) {}
+  constructor(private brokerService: BrokerService) {}
 
   ngOnInit(): void {
-    this.signalRService.stocks$.subscribe(stocks => this.stocks = stocks);
-    this.signalRService
+    this.brokerService.stocks$.subscribe(stocks => this.stocks = stocks);
+    this.brokerService
       .connected$
       .subscribe(connected => {
         if (connected) {
-          this.signalRService.getInitialStocks();
+          this.brokerService.getInitialStocks();
         }
-      })
+      });
   }
 }

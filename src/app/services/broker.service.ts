@@ -4,9 +4,8 @@ import * as signalR from '@microsoft/signalr';
 
 import { Stock } from '../models/stock';
 
-// TODO merge signalr.service with broker.service
 @Injectable()
-export class SignalRService {
+export class BrokerService {
   private hubURL = "https://localhost:5001/brokerhub";
   private connection : signalR.HubConnection;
   // TODO don't hard code

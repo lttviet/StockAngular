@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { SignalRService } from './services/signalr.service';
+import { BrokerService } from './services/broker.service';
 
 @Component({
   selector: 'app-root',
@@ -11,21 +11,21 @@ import { SignalRService } from './services/signalr.service';
     <app-search></app-search>
     <app-portfolio></app-portfolio>
   `,
-  providers: [SignalRService]
+  providers: [BrokerService]
 })
 export class AppComponent implements OnInit {
   title = 'Stock market simulator';
   cash: number;
 
-  constructor(private signalRService: SignalRService) { }
+  constructor(private brokerService: BrokerService) { }
 
   ngOnInit(): void {
-    this.signalRService.cash$.subscribe(cash => this.cash = cash);
-    this.signalRService
+    this.brokerService.cash$.subscribe(cash => this.cash = cash);
+    this.brokerService
       .connected$
       .subscribe(connected => {
         if (connected) {
-          this.signalRService.getInitialCash();
+          this.brokerService.getInitialCash();
         }
       })
   }
