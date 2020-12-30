@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Quote } from './quote.service';
+import { Quote } from './services/quote.service';
 import { Stock } from './models/stock';
 import { BrokerService } from './services/broker.service';
 

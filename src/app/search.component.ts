@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 
-import { QuoteService, Quote, QuoteResponse } from './quote.service';
+import { QuoteService, Quote, QuoteResponse } from './services/quote.service';
 
 @Component({
   selector: 'app-search',
