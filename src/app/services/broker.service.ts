@@ -47,19 +47,19 @@ export class BrokerService {
       .catch(console.error);
   }
 
-  public getInitialCash(): void {
+  getInitialCash(): void {
     this.connection.send("GetCash", this.portfolioId);
   }
 
-  public getInitialStocks(): void {
+  getInitialStocks(): void {
     this.connection.send("GetStocks", this.portfolioId);
   }
 
-  public buyStock(symbol: string, price: number, quantity: number): void {
+  buyStock(symbol: string, price: number, quantity: number): void {
     this.connection.send("BuyStock", this.portfolioId, symbol.toUpperCase(), price, quantity);
   }
 
-  public sellStock(symbol: string, price: number, quantity: number): void {
+  sellStock(symbol: string, price: number, quantity: number): void {
     this.connection.send("SellStock", this.portfolioId, symbol.toUpperCase(), price, quantity);
   }
 }
