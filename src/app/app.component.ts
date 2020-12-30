@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BrokerService } from './broker.service';
-import { SignalRService } from './signalr.service';
+import { SignalRService } from './services/signalr.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +11,7 @@ import { SignalRService } from './signalr.service';
     <app-search></app-search>
     <app-portfolio></app-portfolio>
   `,
-  providers: [BrokerService, SignalRService]
+  providers: [SignalRService]
 })
 export class AppComponent implements OnInit {
   title = 'Stock market simulator';

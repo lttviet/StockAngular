@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Quote } from './quote.service';
-import { Stock } from './broker.service';
-import { SignalRService } from './signalr.service';
+import { Stock } from './models/stock';
+import { SignalRService } from './services/signalr.service';
 
 @Component({
   selector: 'app-info',

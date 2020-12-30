@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import * as signalR from '@microsoft/signalr';
 
-import { Stock } from './broker.service';
+import { Stock } from '../models/stock';
 
 // TODO merge signalr.service with broker.service
 @Injectable()
@@ -28,7 +28,7 @@ export class SignalRService {
       .build();
 
     this.connection.on(
-      "ReceiveCash", 
+      "ReceiveCash",
       (cash: number) => this.cash$.next(cash)
     );
 

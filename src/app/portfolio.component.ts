@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Stock } from './broker.service';
-import { SignalRService } from './signalr.service';
+import { Stock } from './models/stock';
+import { SignalRService } from './services/signalr.service';
 
 @Component({
   selector: 'app-portfolio',
