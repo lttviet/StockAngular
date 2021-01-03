@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import * as signalR from '@microsoft/signalr';
+import { BehaviorSubject, Subject, Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { Stock } from '../models/stock';
+import { Order } from '../models/order';
 
 @Injectable()
 export class BrokerService {
@@ -15,7 +18,7 @@ export class BrokerService {
   stocks$: Subject<Stock[]> = new BehaviorSubject<Stock[]>([]);
   connected$: Subject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.connect();
   }
 
@@ -55,11 +58,38 @@ export class BrokerService {
     this.connection.send("GetStocks", this.portfolioId);
   }
 
-  buyStock(symbol: string, price: number, quantity: number): void {
-    this.connection.send("BuyStock", this.portfolioId, symbol.toUpperCase(), price, quantity);
+  buyStock(order: Order): Observable<void> {
+    const url = `https://localhost:5001/api/portfolio/${this.portfolioId}/stocks/buys`;
+    return this.http
+      .post<void>(url, order)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
-  sellStock(symbol: string, price: number, quantity: number): void {
-    this.connection.send("SellStock", this.portfolioId, symbol.toUpperCase(), price, quantity);
+  sellStock(order: Order): Observable<void> {
+    const url = `https://localhost:5001/api/portfolio/${this.portfolioId}/stocks/sells`;
+    return this.http
+      .post<void>(url, order)
+      .pipe(
+        catchError(this.handleError)
+      );
+
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(
+      'Something bad happened; please try again later.');
   }
 }

@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Quote } from './services/quote.service';
-import { Stock } from './models/stock';
 import { BrokerService } from './services/broker.service';
+import { Stock } from './models/stock';
+import { Order } from './models/order';
+import { noop } from 'rxjs';
 
 @Component({
   selector: 'app-info',
@@ -41,11 +43,33 @@ export class InfoComponent implements OnInit {
   }
 
   buy(symbol: string): void {
-    this.brokerService.buyStock(symbol.toUpperCase(), this.quote.current, 1);
+    const order: Order = {
+      symbol: symbol.toUpperCase(),
+      price: this.quote.current,
+      quantity: 1
+    }
+    this.brokerService
+      .buyStock(order)
+      .subscribe(
+        noop,
+        console.error,
+        () => console.log("Bought")
+      );
   }
 
   sell(symbol: string): void {
-    this.brokerService.sellStock(symbol.toUpperCase(), this.quote.current, 1);
+    const order: Order = {
+      symbol: symbol.toUpperCase(),
+      price: this.quote.current,
+      quantity: 1
+    }
+    this.brokerService
+      .sellStock(order)
+      .subscribe(
+        noop,
+        console.error,
+        () => console.log("Sold")
+      );
   }
 
   canSell(symbol: string): boolean {
