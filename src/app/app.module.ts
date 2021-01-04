@@ -1,9 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search.component';
@@ -20,9 +17,7 @@ import { PortfolioComponent } from './portfolio.component';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
