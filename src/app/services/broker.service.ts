@@ -59,7 +59,7 @@ export class BrokerService {
   }
 
   buyStock(order: Order): Observable<void> {
-    const url = `https://localhost:5001/api/portfolio/${this.portfolioId}/stocks/buys`;
+    const url = `https://localhost:5001/api/portfolio/${this.portfolioId}/stocks/buy`;
     return this.http
       .post<void>(url, order)
       .pipe(
@@ -68,7 +68,7 @@ export class BrokerService {
   }
 
   sellStock(order: Order): Observable<void> {
-    const url = `https://localhost:5001/api/portfolio/${this.portfolioId}/stocks/sells`;
+    const url = `https://localhost:5001/api/portfolio/${this.portfolioId}/stocks/sell`;
     return this.http
       .post<void>(url, order)
       .pipe(
