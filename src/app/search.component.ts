@@ -19,18 +19,21 @@ import { Quote } from './models/quote';
     <div *ngIf="quote">
       <app-info [quote]="quote"></app-info>
     </div>
-  `,
-  providers: [QuoteService]
+  `
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  private lastSymbol = ''; 
+  private symbol = '';
   quote: Quote;
 
   constructor(private quoteService: QuoteService) {
   }
 
   ngOnInit(): void {
-    this.quoteService.quote$.subscribe(quote => this.quote = quote);
+    this.quoteService.quote$.subscribe(quote => {
+      if (quote.symbol === this.symbol) {
+        this.quote = quote;
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -39,14 +42,12 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   search(symbol: string): void {
     // TODO error if symbol not found
-    symbol = symbol.toUpperCase();
+    this.symbol = symbol.toUpperCase();
     this.quote = null;
 
-    if (this.lastSymbol !== '' && this.lastSymbol !== symbol) {
-      this.quoteService.unsubscribe(symbol);
-    }
-    this.lastSymbol = symbol;
+    // TODO unsubscribe last search
+    // Take into account current porfolio?
 
-    this.quoteService.subscribe(symbol);
+    this.quoteService.subscribe(this.symbol);
   }
 }

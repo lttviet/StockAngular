@@ -9,7 +9,7 @@ export class QuoteService {
   private hubURL = 'https://localhost:5001/quotehub';
   private connection : signalR.HubConnection;
 
-  quote$: Subject<Quote> = new BehaviorSubject<Quote>(null);
+  quote$: Subject<Quote> = new BehaviorSubject<Quote>({} as Quote);
   connected$: Subject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor() {
