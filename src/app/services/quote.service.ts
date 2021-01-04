@@ -1,35 +1,55 @@
 import { Injectable } from '@angular/core';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import * as signalR from '@microsoft/signalr';
+import { BehaviorSubject, Subject } from 'rxjs';
 
-export interface Quote {
-  symbol: string,
-  current: number;
-  timestamp: number;
-}
-
-export interface QuoteResponse {
-  type: string,
-  data?: [{
-    s: string,
-    p: number,
-    t: number
-  }]
-}
-
-export interface QuoteRequest {
-  type: string,
-  symbol: string
-}
-
-const SOCKET = '';
+import { Quote } from '../models/quote';
 
 @Injectable()
 export class QuoteService {
-  socket$: WebSocketSubject<QuoteResponse | QuoteRequest>;
+  private hubURL = 'https://localhost:5001/quotehub';
+  private connection : signalR.HubConnection;
 
-  connect(): void {
-    if (!this.socket$ || this.socket$.closed) {
-      this.socket$ = webSocket(SOCKET);
-    }
+  quote$: Subject<Quote> = new BehaviorSubject<Quote>(null);
+  connected$: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+  constructor() {
+    this.connect();
+  }
+
+  private connect(): void {
+     this.connection = new signalR.HubConnectionBuilder()
+      .withUrl(this.hubURL)
+      .withAutomaticReconnect()
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
+
+    this.connection.on(
+      "ReceiveQuote",
+      (quote: Quote) => this.quote$.next(quote)
+    );
+
+    this.connection.on(
+      "ReceiveMessage",
+      (msg: string) => console.log(msg)
+    );
+
+    this.connection
+      .start()
+      .then(() => this.connected$.next(true))
+      .catch(console.error);
+  }
+
+  subscribe(symbol: string): void {
+    this.connection.send("Subscribe", symbol);
+  }
+
+  unsubscribe(symbol: string): void {
+    this.connection.send("Unsubscribe", symbol);
+  }
+
+  stop(): void {
+    this.connection
+      .stop()
+      .then(() => this.connected$.next(false));
   }
 }

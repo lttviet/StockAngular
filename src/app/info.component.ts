@@ -1,22 +1,22 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { noop } from 'rxjs';
 
-import { Quote } from './services/quote.service';
 import { BrokerService } from './services/broker.service';
 import { Stock } from './models/stock';
 import { Order } from './models/order';
-import { noop } from 'rxjs';
+import { Quote } from './models/quote';
 
 @Component({
   selector: 'app-info',
   template: `
     <p>
       {{ quote.symbol | uppercase }}
-      - {{ quote.current | currency: "USD" }}
+      - {{ quote.price | currency: "USD" }}
       - {{ quote.timestamp | date: 'long'}}
 
       <button
         (click)="buy(quote.symbol)"
-        [disabled]="cash < quote.current"
+        [disabled]="cash < quote.price"
       >
         Buy
       </button>
@@ -45,7 +45,7 @@ export class InfoComponent implements OnInit {
   buy(symbol: string): void {
     const order: Order = {
       symbol: symbol.toUpperCase(),
-      price: this.quote.current,
+      price: this.quote.price.toFixed(2),
       quantity: 1
     }
     this.brokerService
@@ -60,7 +60,7 @@ export class InfoComponent implements OnInit {
   sell(symbol: string): void {
     const order: Order = {
       symbol: symbol.toUpperCase(),
-      price: this.quote.current,
+      price: this.quote.price.toFixed(2),
       quantity: 1
     }
     this.brokerService

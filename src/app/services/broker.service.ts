@@ -64,7 +64,7 @@ export class BrokerService {
       .post<void>(url, order)
       .pipe(
         catchError(this.handleError)
-      );
+      )
   }
 
   sellStock(order: Order): Observable<void> {

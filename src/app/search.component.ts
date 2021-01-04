@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { map } from 'rxjs/operators';
 
-import { QuoteService, Quote, QuoteResponse } from './services/quote.service';
+import { QuoteService } from './services/quote.service';
+import { Quote } from './models/quote';
 
 @Component({
   selector: 'app-search',
@@ -30,25 +30,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.quoteService.connect();
-    this.quoteService.socket$.pipe(
-      map((data: QuoteResponse) => {
-        if (data.data) {
-          return {
-            symbol: data.data[0].s,
-            current: data.data[0].p,
-            timestamp: data.data[0].t
-          } as Quote
-        }
-      })
-    ).subscribe(
-      q => this.quote = q,
-      err => console.error(err)
-    );
+    this.quoteService.quote$.subscribe(quote => this.quote = quote);
   }
 
   ngOnDestroy(): void {
-    this.quoteService.socket$.unsubscribe();
+    this.quoteService.stop();
   }
 
   search(symbol: string): void {
@@ -56,12 +42,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     symbol = symbol.toUpperCase();
     this.quote = null;
 
-    if (this.lastSymbol !== '') {
-      this.quoteService.socket$
-        .next({type: 'unsubscribe', symbol: this.lastSymbol});
+    if (this.lastSymbol !== '' && this.lastSymbol !== symbol) {
+      this.quoteService.unsubscribe(symbol);
     }
     this.lastSymbol = symbol;
 
-    this.quoteService.socket$.next({type: 'subscribe', symbol});
+    this.quoteService.subscribe(symbol);
   }
 }
