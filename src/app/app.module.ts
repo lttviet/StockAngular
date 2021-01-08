@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search.component';
@@ -17,7 +18,8 @@ import { PortfolioComponent } from './portfolio.component';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
