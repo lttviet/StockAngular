@@ -1,22 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BrokerService } from './services/broker.service';
+import { BrokerService } from '../services/broker.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-summary',
   template: `
-    <mat-toolbar color="primary">
-      {{title}}
-    </mat-toolbar>
+    <div fxLayout="row wrap" fxLayoutGap="0.5em">
+      <app-summary-card [title]="'Portfolio Value'" [number]="1234" fxFlex>
+      </app-summary-card>
 
-    <app-summary></app-summary>
-
-    <app-search></app-search>
-    <app-portfolio></app-portfolio>
+      <app-summary-card [title]="'Cash'" [number]="cash" fxFlex>
+      </app-summary-card>
+    </div>
   `
 })
-export class AppComponent implements OnInit {
-  title = 'Stock market simulator';
+export class SummaryComponent implements OnInit {
   cash: number;
 
   constructor(private brokerService: BrokerService) { }

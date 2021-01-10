@@ -10,6 +10,8 @@ import { AppComponent } from './app.component';
 import { SearchComponent } from './search.component';
 import { InfoComponent } from './info.component';
 import { PortfolioComponent } from './portfolio.component';
+import { SummaryComponent } from './summary/summary.component';
+import { SummaryCardComponent } from './summary/summary-card.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { PortfolioComponent } from './portfolio.component';
     AppComponent,
     InfoComponent,
     SearchComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    SummaryComponent,
+    SummaryCardComponent
   ],
   imports: [
     BrowserModule,

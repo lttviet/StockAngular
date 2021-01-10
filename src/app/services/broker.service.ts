@@ -7,7 +7,9 @@ import { catchError } from 'rxjs/operators';
 import { Stock } from '../models/stock';
 import { Order } from '../models/order';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class BrokerService {
   private hubURL = "https://localhost:5001/brokerhub";
   private connection : signalR.HubConnection;

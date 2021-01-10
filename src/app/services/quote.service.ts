@@ -4,7 +4,9 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 import { Quote } from '../models/quote';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class QuoteService {
   private hubURL = 'https://localhost:5001/quotehub';
   private connection : signalR.HubConnection;
