@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-
-import { BrokerService } from './services/broker.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -21,20 +19,6 @@ import { BrokerService } from './services/broker.service';
   `,
   styles: ['.app-view { padding: 1em }']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'Stock market simulator';
-  cash: number;
-
-  constructor(private brokerService: BrokerService) { }
-
-  ngOnInit(): void {
-    this.brokerService.cash$.subscribe(cash => this.cash = cash);
-    this.brokerService
-      .connected$
-      .subscribe(connected => {
-        if (connected) {
-          this.brokerService.getInitialCash();
-        }
-      })
-  }
 }

@@ -38,7 +38,7 @@ import { QuoteService } from './services/quote.service';
 })
 export class PortfolioComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['symbol', 'quantity', 'cost', 'current']
-  dataSource = new MatTableDataSource([] as Stock[]);
+  dataSource: MatTableDataSource<Stock> = new MatTableDataSource([]);
 
   @ViewChild(MatSort) sort: MatSort;
 
