@@ -13,7 +13,10 @@ import { BrokerService } from './services/broker.service';
       <app-summary></app-summary>
 
       <app-search></app-search>
-      <app-portfolio></app-portfolio>
+
+      <div fxLayout="row">
+        <app-portfolio fxFlex="1 1 50%"></app-portfolio>
+      </div>
     </div>
   `,
   styles: ['.app-view { padding: 1em }']

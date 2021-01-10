@@ -6,10 +6,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button'; 
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
@@ -17,7 +19,6 @@ import { SearchResultComponent } from './search/search-result.component';
 import { PortfolioComponent } from './portfolio.component';
 import { SummaryComponent } from './summary/summary.component';
 import { SummaryCardComponent } from './summary/summary-card.component';
-
 
 @NgModule({
   declarations: [
@@ -39,7 +40,9 @@ import { SummaryCardComponent } from './summary/summary-card.component';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTableModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]
