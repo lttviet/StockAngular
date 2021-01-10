@@ -1,13 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { noop } from 'rxjs';
 
-import { BrokerService } from './services/broker.service';
-import { Stock } from './models/stock';
-import { Order } from './models/order';
-import { Quote } from './models/quote';
+import { BrokerService } from '../services/broker.service';
+import { Stock } from '../models/stock';
+import { Order } from '../models/order';
+import { Quote } from '../models/quote';
 
 @Component({
-  selector: 'app-info',
+  selector: 'app-search-result',
   template: `
     <p>
       {{ quote.symbol | uppercase }}
@@ -30,7 +30,7 @@ import { Quote } from './models/quote';
     </p>
   `
 })
-export class InfoComponent implements OnInit {
+export class SearchResultComponent implements OnInit {
   @Input() quote: Quote;
   cash: number;
   stocks: Stock[];
@@ -78,7 +78,7 @@ export class InfoComponent implements OnInit {
     }
     
     return this.stocks
-      .find(stock => stock.symbol === symbol.toUpperCase())
+      .find(stock => stock.symbol === symbol)
       ?.quantity > 0;
   }
 }

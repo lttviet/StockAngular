@@ -9,11 +9,14 @@ import { BrokerService } from './services/broker.service';
       {{title}}
     </mat-toolbar>
 
-    <app-summary></app-summary>
+    <div class="app-view">
+      <app-summary></app-summary>
 
-    <app-search></app-search>
-    <app-portfolio></app-portfolio>
-  `
+      <app-search></app-search>
+      <app-portfolio></app-portfolio>
+    </div>
+  `,
+  styles: ['.app-view { padding: 1em }']
 })
 export class AppComponent implements OnInit {
   title = 'Stock market simulator';
