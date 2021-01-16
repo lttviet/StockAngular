@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
@@ -42,7 +43,8 @@ import { SummaryCardComponent } from './summary/summary-card.component';
     MatIconModule,
     MatButtonModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

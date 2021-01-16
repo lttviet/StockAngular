@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { ErrorService } from './services/error.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +22,19 @@ import { Component } from '@angular/core';
   `,
   styles: ['.app-view { padding: 1em }']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Stock market simulator';
+
+  constructor(private snackBar : MatSnackBar, private errorService: ErrorService) {}
+
+  ngOnInit(): void {
+    this.errorService.error$.subscribe(err => {
+      if (err === true) {
+        this.snackBar.open("No Connection", "Dismiss");
+      }
+      else {
+        this.snackBar.dismiss();
+      }
+    });
+  }
 }

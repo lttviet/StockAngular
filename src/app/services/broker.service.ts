@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 
 import { Stock } from '../models/stock';
 import { Order } from '../models/order';
+import { ErrorService } from "./error.service";
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class BrokerService {
   stocks$: Subject<Stock[]> = new BehaviorSubject<Stock[]>([]);
   connected$: Subject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private errorService: ErrorService) {
     this.connect();
   }
 
@@ -48,8 +49,25 @@ export class BrokerService {
 
     this.connection
       .start()
-      .then(() => this.connected$.next(true))
-      .catch(console.error);
+      .then(() => {
+        this.connected$.next(true);
+        this.errorService.error$.next(false);
+      })
+      .catch(() => {
+        this.connected$.next(false);
+        this.errorService.error$.next(true);
+      });
+
+      this.connection.onreconnecting(err => {
+        this.connected$.next(false);
+        this.errorService.error$.next(true);
+        console.error(err);
+      })
+
+      this.connection.onreconnected(() => {
+        this.connected$.next(true);
+        this.errorService.error$.next(false);
+      })
   }
 
   getInitialCash(): void {
