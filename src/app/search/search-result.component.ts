@@ -15,6 +15,7 @@ import { Quote } from '../models/quote';
       - {{ quote.timestamp | date: 'long'}}
 
       <button
+        mat-raised-button color="primary"
         (click)="buy(quote.symbol)"
         [disabled]="cash < quote.price"
       >
@@ -22,6 +23,7 @@ import { Quote } from '../models/quote';
       </button>
 
       <button
+        mat-raised-button color="warn"
         (click)="sell(quote.symbol)"
         [disabled]="!canSell(quote.symbol)"
       >
