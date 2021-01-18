@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
         {{ title }}
       </mat-card-title>
       <mat-card-content>
-        {{ number | currency: "USD" }}
+        {{ number / 100 | currency: "USD" }}
       </mat-card-content>
     </mat-card>
   `

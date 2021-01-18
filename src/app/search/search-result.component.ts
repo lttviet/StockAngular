@@ -11,7 +11,7 @@ import { Quote } from '../models/quote';
   template: `
     <p>
       {{ quote.symbol | uppercase }}
-      - {{ quote.price | currency: "USD" }}
+      - {{ quote.price / 100 | currency: "USD" }}
       - {{ quote.timestamp | date: 'long'}}
 
       <button
@@ -47,7 +47,7 @@ export class SearchResultComponent implements OnInit {
   buy(symbol: string): void {
     const order: Order = {
       symbol: symbol.toUpperCase(),
-      price: this.quote.price.toFixed(2),
+      price: this.quote.price,
       quantity: 1
     }
     this.brokerService
@@ -62,7 +62,7 @@ export class SearchResultComponent implements OnInit {
   sell(symbol: string): void {
     const order: Order = {
       symbol: symbol.toUpperCase(),
-      price: this.quote.price.toFixed(2),
+      price: this.quote.price,
       quantity: 1
     }
     this.brokerService

@@ -12,33 +12,51 @@ import { QuoteService } from './services/quote.service';
     <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="symbol">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock</th>
-        <td mat-cell *matCellDef="let stock">{{ stock.symbol }}</td>
+        <td mat-cell *matCellDef="let stock"
+          [ngClass]="up ? 'stock-up' : 'stock-down'">
+          {{ stock.symbol }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="quantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
-        <td mat-cell *matCellDef="let stock">{{ stock.quantity }}</td>
+        <td mat-cell *matCellDef="let stock"
+          [ngClass]="up ? 'stock-up' : 'stock-down'">
+          {{ stock.quantity }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="cost">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost basis</th>
-        <td mat-cell *matCellDef="let stock">{{ stock.cost }}</td>
+        <td mat-cell *matCellDef="let stock"
+          [ngClass]="up ? 'stock-up' : 'stock-down'">
+          {{ stock.cost / 100 | currency: "USD" }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="current">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Current price</th>
-        <td mat-cell *matCellDef="let stock">{{ stock.current }}</td>
+        <td mat-cell *matCellDef="let stock"
+          [ngClass]="up ? 'stock-up' : 'stock-down'">
+          {{ stock.current / 100 | currency: "USD" }}
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns">
+      </tr>
     </table>
   `,
-  styles: ['table { width: 100% }']
+  styles: [
+    'table { width: 100% }',
+    '.stock-up { color: #04bf09 }', 
+    '.stock-down { color: #cc4505 }',
+  ]
 })
 export class PortfolioComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['symbol', 'quantity', 'cost', 'current']
   dataSource: MatTableDataSource<Stock> = new MatTableDataSource([]);
+  up = false;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -46,13 +64,6 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.brokerService.stocks$.subscribe(stocks => this.dataSource.data = stocks);
-    this.brokerService
-      .connected$
-      .subscribe(connected => {
-        if (connected) {
-          this.brokerService.getInitialStocks();
-        }
-      });
     this.quoteService
       .quote$
       .subscribe(quote => {

@@ -1,5 +1,5 @@
 export interface Order {
   symbol: string;
-  price: string;
+  price: number;
   quantity: number;
 }
