@@ -13,7 +13,7 @@ import { QuoteService } from './services/quote.service';
       <ng-container matColumnDef="symbol">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock</th>
         <td mat-cell *matCellDef="let stock"
-          [ngClass]="up ? 'stock-up' : 'stock-down'">
+          [ngClass]="getStyleClass(stock)">
           {{ stock.symbol }}
         </td>
       </ng-container>
@@ -21,7 +21,7 @@ import { QuoteService } from './services/quote.service';
       <ng-container matColumnDef="quantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
         <td mat-cell *matCellDef="let stock"
-          [ngClass]="up ? 'stock-up' : 'stock-down'">
+          [ngClass]="getStyleClass(stock)">
           {{ stock.quantity }}
         </td>
       </ng-container>
@@ -29,7 +29,7 @@ import { QuoteService } from './services/quote.service';
       <ng-container matColumnDef="cost">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost basis</th>
         <td mat-cell *matCellDef="let stock"
-          [ngClass]="up ? 'stock-up' : 'stock-down'">
+          [ngClass]="getStyleClass(stock)">
           {{ stock.cost / 100 | currency: "USD" }}
         </td>
       </ng-container>
@@ -37,7 +37,7 @@ import { QuoteService } from './services/quote.service';
       <ng-container matColumnDef="current">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Current price</th>
         <td mat-cell *matCellDef="let stock"
-          [ngClass]="up ? 'stock-up' : 'stock-down'">
+          [ngClass]="getStyleClass(stock)">
           {{ stock.current / 100 | currency: "USD" }}
         </td>
       </ng-container>
@@ -56,7 +56,6 @@ import { QuoteService } from './services/quote.service';
 export class PortfolioComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['symbol', 'quantity', 'cost', 'current']
   dataSource: MatTableDataSource<Stock> = new MatTableDataSource([]);
-  up = false;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -76,5 +75,16 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
+  }
+
+  getStyleClass(stock: Stock): string {
+    console.log(stock);
+    if (stock.current > stock.closePrice) {
+      return 'stock-up';
+    } else if (stock.current < stock.closePrice) {
+      return 'stock-down';
+    } else {
+      return '';
+    }
   }
 }
