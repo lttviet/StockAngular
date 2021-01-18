@@ -18,6 +18,7 @@ export class BrokerService {
   private portfolioId = "1";
 
   cash$: Subject<number> = new BehaviorSubject<number>(0);
+  portfolioValue$: Subject<number> = new BehaviorSubject<number>(0);
   stocks$: Subject<Stock[]> = new BehaviorSubject<Stock[]>([]);
   connected$: Subject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -38,6 +39,11 @@ export class BrokerService {
     );
 
     this.connection.on(
+      "ReceivePortfolioValue",
+      (value: number) => this.portfolioValue$.next(value)
+    )
+
+    this.connection.on(
       "ReceiveStocks",
       (stocks: Stock[]) => this.stocks$.next(stocks)
     );
@@ -52,6 +58,7 @@ export class BrokerService {
       .then(() => {
         this.connected$.next(true);
         this.errorService.error$.next(false);
+        this.initSubject();
       })
       .catch(() => {
         this.connected$.next(false);
@@ -67,15 +74,8 @@ export class BrokerService {
       this.connection.onreconnected(() => {
         this.connected$.next(true);
         this.errorService.error$.next(false);
+        this.initSubject();
       })
-  }
-
-  getInitialCash(): void {
-    this.connection.send("GetCash", this.portfolioId);
-  }
-
-  getInitialStocks(): void {
-    this.connection.send("GetStocks", this.portfolioId);
   }
 
   buyStock(order: Order): Observable<void> {
@@ -95,6 +95,16 @@ export class BrokerService {
         catchError(this.handleError)
       );
 
+  }
+
+  /**
+   * Ask server for current values of cash, portfolio value and stocks.
+   * These will be saved into Subject for later usage.
+   */
+  private initSubject(): void {
+    this.connection.send("GetCash", this.portfolioId);
+    this.connection.send("GetPortfolioValue", this.portfolioId);
+    this.connection.send("GetStocks", this.portfolioId);
   }
 
   private handleError(error: HttpErrorResponse) {

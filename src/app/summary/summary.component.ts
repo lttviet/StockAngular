@@ -6,7 +6,7 @@ import { BrokerService } from '../services/broker.service';
   selector: 'app-summary',
   template: `
     <div fxLayout="row wrap" fxLayoutGap="0.5em">
-      <app-summary-card [title]="'Portfolio Value'" [number]="1234" fxFlex>
+      <app-summary-card [title]="'Portfolio Value'" [number]="portfolioValue" fxFlex>
       </app-summary-card>
 
       <app-summary-card [title]="'Cash'" [number]="cash" fxFlex>
@@ -16,17 +16,12 @@ import { BrokerService } from '../services/broker.service';
 })
 export class SummaryComponent implements OnInit {
   cash: number;
+  portfolioValue: number;
 
   constructor(private brokerService: BrokerService) { }
 
   ngOnInit(): void {
     this.brokerService.cash$.subscribe(cash => this.cash = cash);
-    this.brokerService
-      .connected$
-      .subscribe(connected => {
-        if (connected) {
-          this.brokerService.getInitialCash();
-        }
-      })
+    this.brokerService.portfolioValue$.subscribe(pv => this.portfolioValue = pv);
   }
 }
