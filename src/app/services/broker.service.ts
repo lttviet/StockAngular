@@ -65,10 +65,9 @@ export class BrokerService {
         this.errorService.error$.next(true);
       });
 
-      this.connection.onreconnecting(err => {
+      this.connection.onreconnecting(() => {
         this.connected$.next(false);
         this.errorService.error$.next(true);
-        console.error(err);
       })
 
       this.connection.onreconnected(() => {

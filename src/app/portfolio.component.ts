@@ -78,7 +78,6 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
   }
 
   getStyleClass(stock: Stock): string {
-    console.log(stock);
     if (stock.current > stock.closePrice) {
       return 'stock-up';
     } else if (stock.current < stock.closePrice) {
