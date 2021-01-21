@@ -12,7 +12,7 @@ import { Quote } from '../models/quote';
     <p>
       {{ quote.symbol | uppercase }}
       - {{ quote.price / 100 | currency: "USD" }}
-      - {{ quote.timestamp | date: 'long'}}
+      - {{ quote.timestamp | date: 'medium'}}
 
       <button
         mat-raised-button color="primary"
