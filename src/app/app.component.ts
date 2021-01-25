@@ -15,8 +15,9 @@ import { ErrorService } from './services/error.service';
 
       <app-search></app-search>
 
-      <div fxLayout="row">
-        <app-portfolio fxFlex="1 1 50%"></app-portfolio>
+      <div fxLayout="row wrap" fxLayoutGap="0.5em">
+        <app-portfolio fxFlex></app-portfolio>
+        <app-history fxFlex></app-history>
       </div>
     </div>
   `,

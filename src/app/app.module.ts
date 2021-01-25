@@ -14,6 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatListModule } from '@angular/material/list'; 
 
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
@@ -21,6 +22,7 @@ import { SearchResultComponent } from './search/search-result.component';
 import { PortfolioComponent } from './portfolio.component';
 import { SummaryComponent } from './summary/summary.component';
 import { SummaryCardComponent } from './summary/summary-card.component';
+import { HistoryComponent } from './history.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { SummaryCardComponent } from './summary/summary-card.component';
     SearchComponent,
     PortfolioComponent,
     SummaryComponent,
-    SummaryCardComponent
+    SummaryCardComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,8 @@ import { SummaryCardComponent } from './summary/summary-card.component';
     MatSortModule,
     MatSnackBarModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

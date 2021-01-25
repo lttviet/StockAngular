@@ -36,9 +36,13 @@ import { Quote } from '../models/quote';
   styles: ['.stock-input { text-transform:uppercase }']
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  quote: Quote;
+  quote: Quote = {price: 103, symbol: 'TEST', timestamp: 1024}
   currentSymbol = '';
-  symbols: string[] = ['AAPL', 'AA', 'BB', 'MSFT', 'FB', 'GE', 'GME'];
+  // max 50, free api usage
+  symbols: string[] = [
+    'AAPL', 'AA', 'BB', 'MSFT', 'FB', 'GE', 'GME',
+    'TLSA', 'AMD'
+  ];
   filteredSymbols: string[] = this.symbols;
 
   constructor(private quoteService: QuoteService) {
