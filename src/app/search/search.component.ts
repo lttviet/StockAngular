@@ -7,36 +7,38 @@ import { Quote } from '../models/quote';
 @Component({
   selector: 'app-search',
   template: `
-    <mat-form-field>
-      <mat-label>Stock</mat-label>
+    <div fxLayout="row wrap" fxLayoutGap="0.5em">
+      <mat-form-field fxFlex>
+        <mat-label>Stock</mat-label>
 
-      <input matInput type="text" placeholder="AAPL" class="stock-input"
-        [matAutocomplete]="auto"
-        (keyup.enter)="search()"
-        [(ngModel)]="currentSymbol"
-        (ngModelChange)="filteredSymbols = filter(currentSymbol)">
-      
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let symbol of filteredSymbols" [value]="symbol">
-          {{symbol}}
-        </mat-option>
-      </mat-autocomplete>
+        <input matInput type="text" placeholder="AAPL" class="stock-input"
+          [matAutocomplete]="auto"
+          (keyup.enter)="search()"
+          [(ngModel)]="currentSymbol"
+          (ngModelChange)="filteredSymbols = filter(currentSymbol)">
+        
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let symbol of filteredSymbols" [value]="symbol">
+            {{symbol}}
+          </mat-option>
+        </mat-autocomplete>
 
-      <button matSuffix mat-icon-button aria-label="Search"
-        [disabled]="!currentSymbol"
-        (click)="search()">
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
+        <button matSuffix mat-icon-button aria-label="Search"
+          [disabled]="!currentSymbol"
+          (click)="search()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
 
-    <div *ngIf="quote">
-      <app-search-result [quote]="quote"></app-search-result>
+      <div fxFlex>
+        <app-search-result *ngIf="quote" [quote]="quote"></app-search-result>
+      </div>
     </div>
   `,
   styles: ['.stock-input { text-transform:uppercase }']
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  quote: Quote = {price: 103, symbol: 'TEST', timestamp: 1024}
+  quote: Quote;
   currentSymbol = '';
   // max 50, free api usage
   symbols: string[] = [
