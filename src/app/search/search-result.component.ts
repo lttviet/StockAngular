@@ -9,27 +9,29 @@ import { Quote } from '../models/quote';
 @Component({
   selector: 'app-search-result',
   template: `
-    <p>
-      {{ quote.symbol | uppercase }}
-      - {{ quote.price / 100 | currency: "USD" }}
-      - {{ quote.timestamp | date: 'medium'}}
+    <div fxLayout="row wrap" fxLayoutGap="0.5em" fxLayoutAlign="start center"> 
+      <p fxFlex>
+        {{ quote.symbol | uppercase }}
+        - {{ quote.price / 100 | currency: "USD" }}
+        - {{ quote.timestamp | date: 'medium'}}
+      </p>
 
-      <button
-        mat-raised-button color="primary"
-        (click)="buy(quote.symbol)"
-        [disabled]="cash < quote.price"
-      >
-        Buy
-      </button>
+        <button
+          mat-raised-button color="primary"
+          (click)="buy(quote.symbol)"
+          [disabled]="cash < quote.price"
+        >
+          Buy
+        </button>
 
-      <button
-        mat-raised-button color="warn"
-        (click)="sell(quote.symbol)"
-        [disabled]="!canSell(quote.symbol)"
-      >
-        Sell
-      </button>
-    </p>
+        <button
+          mat-raised-button color="warn"
+          (click)="sell(quote.symbol)"
+          [disabled]="!canSell(quote.symbol)"
+        >
+          Sell
+        </button>
+    </div>
   `
 })
 export class SearchResultComponent implements OnInit {
