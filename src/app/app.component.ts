@@ -13,7 +13,7 @@ import { ErrorService } from './services/error.service';
     <div class="app-view">
       <app-summary></app-summary>
 
-      <app-search></app-search>
+      <app-search class="app-search"></app-search>
 
       <div fxLayout="row wrap" fxLayoutGap="0.5em">
         <app-portfolio fxFlex></app-portfolio>
@@ -21,7 +21,7 @@ import { ErrorService } from './services/error.service';
       </div>
     </div>
   `,
-  styles: ['.app-view { padding: 1em }']
+  styles: ['.app-view { padding: 1em }', '.app-search { display: block; margin: 5px auto }']
 })
 export class AppComponent implements OnInit {
   title = 'Stock market simulator';
