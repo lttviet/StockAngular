@@ -50,7 +50,7 @@ import { QuoteService } from './services/quote.service';
   styles: [
     'table { width: 100% }',
     '.stock-up { color: #04bf09 }', 
-    '.stock-down { color: #cc4505 }',
+    '.stock-down { color: red }',
   ]
 })
 export class PortfolioComponent implements OnInit, AfterViewInit {
