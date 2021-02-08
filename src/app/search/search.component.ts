@@ -7,7 +7,7 @@ import { Quote } from '../models/quote';
 @Component({
   selector: 'app-search',
   template: `
-    <div fxLayout="row wrap" fxLayoutGap="0.5em">
+    <div fxLayout="row wrap" fxLayoutGap="1em">
       <mat-form-field fxFlex>
         <mat-label>Stock</mat-label>
 

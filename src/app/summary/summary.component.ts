@@ -5,7 +5,7 @@ import { BrokerService } from '../services/broker.service';
 @Component({
   selector: 'app-summary',
   template: `
-    <div fxLayout="row wrap" fxLayoutGap="0.5em">
+    <div fxLayout="row wrap" fxLayoutGap="1em">
       <app-summary-card [title]="'Portfolio Value'" [number]="portfolioValue" fxFlex>
       </app-summary-card>
 
