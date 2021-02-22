@@ -42,6 +42,13 @@ import { QuoteService } from './services/quote.service';
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="candle">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Weekly</th>
+        <td mat-cell *matCellDef="let stock">
+          <app-candle [symbol]="stock.symbol"></app-candle>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns">
       </tr>
@@ -54,10 +61,12 @@ import { QuoteService } from './services/quote.service';
   ]
 })
 export class PortfolioComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['symbol', 'quantity', 'cost', 'current']
+  displayedColumns: string[] = ['symbol', 'quantity', 'cost', 'current', 'candle']
   dataSource: MatTableDataSource<Stock> = new MatTableDataSource([]);
 
   @ViewChild(MatSort) sort: MatSort;
+
+  hello = 'heelo';
 
   constructor(private brokerService: BrokerService, private quoteService: QuoteService) {}
 

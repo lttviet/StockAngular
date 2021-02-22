@@ -23,6 +23,7 @@ import { PortfolioComponent } from './portfolio.component';
 import { SummaryComponent } from './summary/summary.component';
 import { SummaryCardComponent } from './summary/summary-card.component';
 import { HistoryComponent } from './history.component';
+import { CandleComponent } from './candle.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { HistoryComponent } from './history.component';
     PortfolioComponent,
     SummaryComponent,
     SummaryCardComponent,
-    HistoryComponent
+    HistoryComponent,
+    CandleComponent
   ],
   imports: [
     BrowserModule,
