@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 
 import { CandleService } from './services/candle.service';
 
-
 @Component({
   selector: 'app-candle',
   template: `
@@ -25,7 +24,6 @@ export class CandleComponent implements AfterViewInit {
     this.candleService
       .getCandle(this.symbol)
       .subscribe(data => {
-        
         this.drawBars(data.dailyChange);
       });
   }
@@ -56,6 +54,6 @@ export class CandleComponent implements AfterViewInit {
         .attr('y', d => d > 0 ? y(d) : y(0))
         .attr('width', barWidth)
         .attr('height', d => Math.abs(y(d) - y(0)))
-        .attr('fill', d => d > 0 ? 'steelblue' : 'tomato');
+        .attr('fill', d => d > 0 ? ' #04bf09' : 'red');
   }
 }

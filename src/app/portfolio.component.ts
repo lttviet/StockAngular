@@ -43,7 +43,7 @@ import { QuoteService } from './services/quote.service';
       </ng-container>
 
       <ng-container matColumnDef="candle">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Weekly</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Monthly</th>
         <td mat-cell *matCellDef="let stock">
           <app-candle [symbol]="stock.symbol"></app-candle>
         </td>
@@ -65,8 +65,6 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Stock> = new MatTableDataSource([]);
 
   @ViewChild(MatSort) sort: MatSort;
-
-  hello = 'heelo';
 
   constructor(private brokerService: BrokerService, private quoteService: QuoteService) {}
 
