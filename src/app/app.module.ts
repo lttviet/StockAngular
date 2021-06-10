@@ -24,17 +24,24 @@ import { SummaryComponent } from './summary/summary.component';
 import { SummaryCardComponent } from './summary/summary-card.component';
 import { HistoryComponent } from './history.component';
 import { CandleComponent } from './candle.component';
+import { AppRoutingModule } from './app-routing.module';
+import { HomepageComponent } from './homepage/homepage.component';
+import { SigninComponent } from './auth/signin.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomepageComponent,
+    SigninComponent,
     SearchResultComponent,
     SearchComponent,
     PortfolioComponent,
     SummaryComponent,
     SummaryCardComponent,
     HistoryComponent,
-    CandleComponent
+    CandleComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -42,6 +49,7 @@ import { CandleComponent } from './candle.component';
     HttpClientModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
     MatToolbarModule,
     MatCardModule,
     MatFormFieldModule,

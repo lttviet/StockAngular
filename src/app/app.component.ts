@@ -7,18 +7,13 @@ import { ErrorService } from './services/error.service';
   selector: 'app-root',
   template: `
     <mat-toolbar color="primary">
-      {{title}}
+      <span>{{title}}</span>
+      <span fxFlex></span>
+      <a mat-stroked-button routerLink="/signin">Sign in</a>
     </mat-toolbar>
 
     <div class="app-view">
-      <app-summary></app-summary>
-
-      <app-search class="app-search"></app-search>
-
-      <div fxLayout="row wrap" fxLayoutGap="1em">
-        <app-portfolio fxFlex></app-portfolio>
-        <app-history fxFlex></app-history>
-      </div>
+      <router-outlet></router-outlet>
     </div>
   `,
   styles: ['.app-view { padding: 1em }', '.app-search { display: block; margin: 5px auto }']
