@@ -26,14 +26,14 @@ import { HistoryComponent } from './history.component';
 import { CandleComponent } from './candle.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomepageComponent } from './homepage/homepage.component';
-import { SigninComponent } from './auth/signin.component';
+import { LoginComponent } from './auth/login.component';
 import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
-    SigninComponent,
+    LoginComponent,
     SearchResultComponent,
     SearchComponent,
     PortfolioComponent,
