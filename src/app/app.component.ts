@@ -9,6 +9,7 @@ import { ErrorService } from './services/error.service';
     <mat-toolbar color="primary">
       <span>{{title}}</span>
       <span fxFlex></span>
+      <a mat-stroked-button routerLink="/profile">Profile</a>
       <a mat-stroked-button routerLink="/login">Login</a>
     </mat-toolbar>
 

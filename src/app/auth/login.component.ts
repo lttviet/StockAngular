@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
@@ -9,7 +10,7 @@ import { AuthService } from './auth.service';
   template: `
     <h1>{{message}}</h1>
 
-    <form class="login-form" *ngIf="!authService.isLoggedIn">
+    <form class="login-form" *ngIf="message === 'Login'">
       <mat-form-field class="form-full-width" appearance="fill">
         <mat-label>Email</mat-label>
         
@@ -24,23 +25,28 @@ import { AuthService } from './auth.service';
       <button mat-stroked-button (click)="login()">Login</button>
     </form>
 
-    <button mat-stroked-button (click)="logout()" *ngIf="authService.isLoggedIn">Logout</button>
+    <button mat-stroked-button (click)="logout()" *ngIf="message === 'Logout'">Logout</button>
   `,
   styles: [
     '.login-form { max-width: 500px }',
     '.form-full-width { width: 100% }'
   ]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
+  authSubscription: Subscription;
   message: string;
   email = new FormControl('', [Validators.required, Validators.email]);
 
-  constructor(public authService: AuthService, public router: Router) {
-    this.message = this.getMessage();
+  constructor(public authService: AuthService, public router: Router) {}
+
+  ngOnInit(): void {
+    this.authSubscription = this.authService.loggedIn$.subscribe((user) => {
+      this.message = user ? 'Logout' : 'Login';
+    });
   }
 
-  getMessage(): string {
-    return this.authService.isLoggedIn ? 'Logout' : 'Login';
+  ngOnDestroy(): void {
+    this.authSubscription.unsubscribe();
   }
 
   getErrorMessage(): string {
@@ -56,18 +62,11 @@ export class LoginComponent {
       return;
     }
 
-    this.message = "Logging in...";
-
-    this.authService.login().subscribe(() => {
-      if (this.authService.isLoggedIn) {
-        this.message = this.getMessage();
-        this.router.navigate(['/profile']);
-      }
-    })
+    this.authService.emailLogInLink(this.email.value);
+    this.message = "Please check your email for login link.";
   }
 
   logout(): void {
     this.authService.logout();
-    this.message = this.getMessage();
   }
 }

@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { Stock } from '../models/stock';
 import { Order } from '../models/order';
 import { ErrorService } from "./error.service";
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +15,23 @@ import { ErrorService } from "./error.service";
 export class BrokerService {
   private hubURL = "https://localhost:5001/brokerhub";
   private connection : signalR.HubConnection;
-  // TODO don't hard code
-  private portfolioId = "1";
+  private portfolioId: string;
 
   cash$: Subject<number> = new BehaviorSubject<number>(0);
   portfolioValue$: Subject<number> = new BehaviorSubject<number>(0);
   stocks$: Subject<Stock[]> = new BehaviorSubject<Stock[]>([]);
   connected$: Subject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
-    this.connect();
+  constructor(private http: HttpClient, private errorService: ErrorService, private authService: AuthService) {
+    this.authService.loggedIn$
+      .subscribe((user) => {
+        if (user) {
+          this.portfolioId = user.uid;
+          this.connect();
+        } else {
+          this.stop();
+        }
+      });
   }
 
   private connect(): void {
@@ -93,7 +101,6 @@ export class BrokerService {
       .pipe(
         catchError(this.handleError)
       );
-
   }
 
   /**
@@ -104,6 +111,12 @@ export class BrokerService {
     this.connection.send("GetCash", this.portfolioId);
     this.connection.send("GetPortfolioValue", this.portfolioId);
     this.connection.send("GetStocks", this.portfolioId);
+  }
+
+  stop(): void {
+    this.connection
+      .stop()
+      .then(() => this.connected$.next(false));
   }
 
   private handleError(error: HttpErrorResponse) {

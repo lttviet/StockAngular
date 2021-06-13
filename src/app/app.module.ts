@@ -28,6 +28,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomepageComponent } from './homepage/homepage.component';
 import { LoginComponent } from './auth/login.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
+import { EmailLoginComponent } from './auth/email-login.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,8 @@ import { ProfileComponent } from './profile/profile.component';
     SummaryCardComponent,
     HistoryComponent,
     CandleComponent,
-    ProfileComponent
+    ProfileComponent,
+    EmailLoginComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +54,7 @@ import { ProfileComponent } from './profile/profile.component';
     FlexLayoutModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase),
     MatToolbarModule,
     MatCardModule,
     MatFormFieldModule,
