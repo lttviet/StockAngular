@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
+import { environment } from 'src/environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,8 +17,10 @@ export class AuthService {
   }
 
   async emailLogInLink(email: string): Promise<boolean> {
+    const logInURL: string = environment.urls.logInLink;
+
     const actionCodeSettings = {
-      url: 'http://localhost:4200/emaillogin',
+      url: logInURL,
       handleCodeInApp: true,
     };
     

@@ -4,12 +4,13 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 import { Quote } from '../models/quote';
 import { ErrorService } from "./error.service";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuoteService {
-  private hubURL = 'https://localhost:5001/quotehub';
+  private hubURL = environment.urls.quoteHub;
   private connection : signalR.HubConnection;
 
   quote$: Subject<Quote> = new BehaviorSubject<Quote>({} as Quote);

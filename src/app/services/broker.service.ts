@@ -8,12 +8,12 @@ import { Stock } from '../models/stock';
 import { Order } from '../models/order';
 import { ErrorService } from "./error.service";
 import { AuthService } from '../auth/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BrokerService {
-  private hubURL = "https://localhost:5001/brokerhub";
   private connection : signalR.HubConnection;
   private portfolioId: string;
 
@@ -35,8 +35,10 @@ export class BrokerService {
   }
 
   private connect(): void {
-     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(this.hubURL)
+    const hubURL: string = environment.urls.brokerHub;
+
+    this.connection = new signalR.HubConnectionBuilder()
+      .withUrl(hubURL)
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
       .build();
